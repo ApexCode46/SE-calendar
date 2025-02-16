@@ -9,9 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106",
-    "next": "15.0.3"
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/list": "^6.1.15",
+    "@fullcalendar/react": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
+    "@nextui-org/modal": "^2.0.41",
+    "@nextui-org/react": "^2.6.10",
+    "@nextui-org/system": "^2.4.5",
+    "@nextui-org/table": "^2.2.7",
+    "@nextui-org/theme": "^2.2.11",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.15.0",
+    "mysql2": "^3.11.5",
+    "next": "^15.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "postcss": "^8",
