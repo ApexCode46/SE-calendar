@@ -33,9 +33,6 @@ const ShowModal = ({ isOpen, onOpenChange, detailEvent }) => {
       setDescription(detailEvent?.user_res_description || "ไม่มีข้อมูล");
       setStartDateTime(formatDateTime(detailEvent?.user_res_datetime_start));
       setEndDateTime(formatDateTime(detailEvent?.user_res_datetime_end));
-      
-      console.log(startDateTime);
-      console.log(endDateTime);
     }
   }, [detailEvent]);
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDisclosure } from "@nextui-org/react";
 import EditModal from "./EditModal";
 
+
 const TableComponent = () => {
   const {
     isOpen: isOpenEditModal,

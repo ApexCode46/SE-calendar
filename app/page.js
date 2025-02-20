@@ -1,107 +1,80 @@
 "use client";
-import { useState } from "react";
 
-export default function login() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
+export default function LoginPage() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsLoading(false);
+    setError("");
+    setLoading(true);
+
+    try {
+      const result = await signIn("credentials", {
+        username,
+        password,
+        redirect: false,
+      });
+  
+      if (result.error) {
+        setError(result.error);
+      } else {
+        router.push("/calendar"); 
+      }
+    } catch(error) { 
+      setError("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
-    <div className="flex flex-col  py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          เข้าสู่ระบบ
-        </h2>
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 bg-white rounded shadow-xl mt-10">
+      <h1 className="text-2xl font-bold mb-6 text-center">เข้าสู่ระบบ</h1>
+      
+      {error && <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">{error}</div>}
+      
+      <div className="mb-4">
+        <label htmlFor="username" className="block mb-1">ชื่อผู้ใช้</label>
+        <input 
+          id="username"
+          type="text" 
+          placeholder="กรอกชื่อผู้ใช้" 
+          value={username} 
+          onChange={(e) => setUsername(e.target.value)} 
+          className="w-full p-2 border rounded" 
+          required 
+        />
       </div>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                ผู้ใช้
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="ผู้ใช้งาน"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                รหัสผ่าน
-              </label>
-              <div className="mt-1 relative">
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="รหัสผ่าน"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                ></button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center"></div>
-              <div className="text-sm"></div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-800 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
-              </button>
-            </div>
-          </form>
-
-          <p className="mt-6 text-center text-sm text-gray-600">
-            ยังไม่มีบัญชี?{" "}
-            <a
-              href="#"
-              className="font-medium text-red-800 hover:text-red-500"
-            >
-              สมัครสมาชิก
-            </a>{" "}
-            หรือ{" "}
-            <a
-              href="#"
-              className="font-medium text-red-800 hover:text-red-500"
-            >
-              ลืมรหัสผ่าน?
-            </a>
-          </p>
-        </div>
+      
+      <div className="mb-6">
+        <label htmlFor="password" className="block mb-1">รหัสผ่าน</label>
+        <input 
+          id="password"
+          type="password" 
+          placeholder="กรอกรหัสผ่าน" 
+          value={password} 
+          onChange={(e) => setPassword(e.target.value)} 
+          className="w-full p-2 border rounded" 
+          required 
+        />
       </div>
-    </div>
+      
+      <button 
+        type="submit" 
+        className="w-full bg-red-800 text-yellow-300 p-2 rounded hover:bg-blue-600"
+        disabled={loading}
+      >
+        {loading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
+      </button>
+    </form>
   );
 }

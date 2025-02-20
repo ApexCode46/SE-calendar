@@ -10,8 +10,11 @@ import CreateModal from "../components/CreateModal";
 import ShowModal from "../components/ShowModal";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function Calendar() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const {
     isOpen: isOpenCreateModal,
     onOpen: onOpenCreateModal,
@@ -26,8 +29,8 @@ export default function Calendar() {
   const [events, setEvents] = useState([]);
   const [detailEvent, setDetailEvent] = useState([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
+  
+  
   const handleSelect = (info) => {
     setSelectedInfo(info);
     onOpenCreateModal();
@@ -58,7 +61,6 @@ export default function Calendar() {
       }
       const results = await response.json();
       setEvents(results);
-      console.log(results);
     } catch (e) {
       console.log("Error fetching events:", e);
     } finally {
@@ -67,10 +69,26 @@ export default function Calendar() {
   };
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    if (status === 'unauthenticated') {
+      router.push('/');
+      return;
+    }
 
-  if (loading) return <p>Loading...</p>;
+    if (status === 'authenticated') {
+      fetchEvents();
+    }
+  }, [status, router, session]);
+
+  if (loading || status === 'loading') {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+          <p className="mt-2">กำลังโหลดข้อมูล...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -118,7 +136,6 @@ export default function Calendar() {
         onOpenChange={onChangeCreateModal}
         selectedInfo={selectedInfo}
         fetchEvents={fetchEvents}
-        
       />
       
       <ShowModal
