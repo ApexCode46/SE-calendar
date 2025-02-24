@@ -14,7 +14,7 @@ import { useSession } from "next-auth/react";
 
 export default function Calendar() {
   const { data: session, status } = useSession();
-  const router = useRouter();
+  const router = useRouter();   
   const {
     isOpen: isOpenCreateModal,
     onOpen: onOpenCreateModal,
@@ -46,6 +46,7 @@ export default function Calendar() {
       }
 
       const results = await response.json();
+      console.log(results);
       setDetailEvent(results);
       onOpenShowModal();
     } catch (e) {
@@ -112,9 +113,12 @@ export default function Calendar() {
         events={events.map((event) => ({
           id: event.user_reserve_id,
           title: event.user_res_topic,
-          start: event.user_res_datetime_start,
+          start: event.user_res_datetime_start, 
           end: event.user_res_datetime_end,
           description: event.user_res_description,
+          backgroundColor: "#c20e0f",  
+          borderColor: "#c20e0f",   
+          textColor: "#fff",
         }))}
         eventTimeFormat={{
           hour: "numeric",

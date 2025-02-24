@@ -1,17 +1,13 @@
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-} from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 
 const ShowModal = ({ isOpen, onOpenChange, detailEvent }) => {
+  const [fullName, setFullName] = useState("");
   const [userId, setUserId] = useState("");
   const [topic, setTopic] = useState("");
   const [description, setDescription] = useState("");
-  const [startDateTime, setStartDateTime] = useState("");  
-  const [endDateTime, setEndDateTime] = useState("");      
+  const [startDateTime, setStartDateTime] = useState("");
+  const [endDateTime, setEndDateTime] = useState("");
 
   const formatDateTime = (dateTimeStr) => {
     if (!dateTimeStr) return "";
@@ -26,8 +22,8 @@ const ShowModal = ({ isOpen, onOpenChange, detailEvent }) => {
   };
 
   useEffect(() => {
-    
     if (detailEvent) {
+      setFullName(`${detailEvent?.title || ''} ${detailEvent?.firstname || ''} ${detailEvent?.lastname || ''}`.trim());
       setUserId(detailEvent?.user_id || "ไม่มีข้อมูล");
       setTopic(detailEvent?.user_res_topic || "ไม่มีข้อมูล");
       setDescription(detailEvent?.user_res_description || "ไม่มีข้อมูล");
@@ -43,6 +39,15 @@ const ShowModal = ({ isOpen, onOpenChange, detailEvent }) => {
         <ModalBody>
           {detailEvent ? (
             <>
+              <p>
+                <strong>ชื่อผู้จอง:</strong>
+                <input
+                  type="text"
+                  value={fullName}
+                  disabled
+                  className="w-full p-2 border rounded"
+                />
+              </p>
               <p>
                 <strong>รหัสประจำตัว:</strong>
                 <input
@@ -82,7 +87,6 @@ const ShowModal = ({ isOpen, onOpenChange, detailEvent }) => {
               <p>
                 <strong>หมายเหตุ:</strong>
                 <textarea
-                  
                   value={description}
                   disabled
                   className="w-full p-2 border rounded"

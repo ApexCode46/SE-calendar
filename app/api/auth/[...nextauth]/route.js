@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import db from "@/db/db";
-import bcrypt from "bcrypt";
 
 export const authOptions = {
   providers: [
@@ -16,7 +15,6 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // ดึงข้อมูลจากฐานข้อมูล
         const [rows] = await db.execute(
           "SELECT accounts.username, accounts.password, accounts.role, users.user_id, users.title, users.firstname, users.lastname FROM accounts INNER JOIN users ON accounts.user_id = users.user_id WHERE accounts.username = ?",
           [credentials.username]
@@ -27,14 +25,11 @@ export const authOptions = {
         }
 
         const user = rows[0];
-        console.log(user);
 
-        // ตรวจสอบรหัสผ่าน (ควรใช้ bcrypt เปรียบเทียบ)
         if (credentials.password !== user.password) {
           throw new Error("Invalid password!");
         }
 
-        // ส่งข้อมูลผู้ใช้กลับไปใน session
         return {
           id: user.user_id,
           username: user.username,

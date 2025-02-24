@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDisclosure } from "@nextui-org/react";
 import EditModal from "./EditModal";
+import { useRouter } from "next/navigation";
 
 
 const TableComponent = () => {
@@ -16,6 +17,8 @@ const TableComponent = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 10;
+
+  const router = useRouter();
 
   const handleEdit = (item) => {
     setSelectItem(item);
@@ -105,7 +108,9 @@ const TableComponent = () => {
             onChange={handleSearch}
             className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          <button className="p-3 mx-7 bg-slate-700 text-white hover:bg-slate-800 rounded" onClick={() => router.push('/calendar')}>จอง</button>
         </div>
+        
 
         <div className="shadow-md rounded-lg overflow-hidden">
           <table className="w-full">

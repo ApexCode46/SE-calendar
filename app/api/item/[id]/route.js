@@ -12,7 +12,7 @@ export async function GET(req, {params} ) {
     }
 
     const [results] = await db.query(
-      "SELECT * FROM user_reservation WHERE user_reserve_id = ?",
+      "SELECT user_reservation.user_reserve_id, user_reservation.user_id, user_reservation.user_res_topic, user_reservation.user_res_description, user_reservation.user_res_datetime_start, user_reservation.user_res_datetime_end, users.title, users.firstname, users.lastname FROM user_reservation INNER JOIN users ON user_reservation.user_id = users.user_id WHERE user_reserve_id = ?",
       [id]
     );
 
