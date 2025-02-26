@@ -34,7 +34,6 @@ const TableComponent = () => {
       }
       const results = await response.json();
       setData(results);
-      console.log(results);
     } catch (e) {
       console.log("Error fetching data:", e);
     } finally {

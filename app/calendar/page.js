@@ -46,7 +46,6 @@ export default function Calendar() {
       }
 
       const results = await response.json();
-      console.log(results);
       setDetailEvent(results);
       onOpenShowModal();
     } catch (e) {

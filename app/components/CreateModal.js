@@ -7,8 +7,10 @@ import {
   Button,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 const CreateModal = ({ isOpen, onOpenChange, selectedInfo, fetchEvents }) => {
+  const { data: session, status } = useSession();
   const [topic, setTopic] = useState("");
   const [description, setDescription] = useState("");
   const [startDateTime, setStartDateTime] = useState("");
@@ -112,11 +114,11 @@ const CreateModal = ({ isOpen, onOpenChange, selectedInfo, fetchEvents }) => {
           {selectedInfo ? (
             <>
               <p className="mb-4">
-                <strong>ชื่อผู้จอง : </strong> นายศราวุธ พจนา
+                <strong>ชื่อผู้จอง : </strong>{session.user.title} {session.user.firstname} {session.user.lastname}
               </p>
 
               <p className="mb-4">
-                <strong>รหัส :</strong> 6510014111
+                <strong>รหัส :</strong> {session.user.id}
               </p>
 
               {errorMessage && (

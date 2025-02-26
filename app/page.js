@@ -70,7 +70,7 @@ export default function LoginPage() {
       
       <button 
         type="submit" 
-        className="w-full bg-red-800 text-yellow-300 p-2 rounded hover:bg-blue-600"
+        className="w-full bg-red-800 text-yellow-300 p-2 rounded hover:bg-red-700"
         disabled={loading}
       >
         {loading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}

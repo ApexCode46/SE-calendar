@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import db from "@/db/db";
+import bcrypt from "bcrypt";
 
 export const authOptions = {
   providers: [
@@ -26,7 +27,8 @@ export const authOptions = {
 
         const user = rows[0];
 
-        if (credentials.password !== user.password) {
+        const passwordMatch = await bcrypt.compare(credentials.password, user.password);
+        if (!passwordMatch) {
           throw new Error("Invalid password!");
         }
 
