@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
 import db from "@/db/db";
-import { getServerSession } from "next-auth"; // ✅ Correct server-side session retrieval
+import { getServerSession } from "next-auth"; 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session) {
+      return NextResponse.json(
+        { error: "Unauthorized - Please login first" }, 
+        { status: 401 }
+      );
+    }
+
     const [results] = await db.query("SELECT * FROM user_reservation");
     return NextResponse.json(results, { status: 200 });
   } catch (e) {

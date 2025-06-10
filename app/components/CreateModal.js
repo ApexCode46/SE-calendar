@@ -82,18 +82,36 @@ const CreateModal = ({ isOpen, onOpenChange, selectedInfo, fetchEvents }) => {
 
   
   const formatDateTime = (dateTimeStr) => {
-    if (!dateTimeStr) return "";
-    const date = new Date(dateTimeStr);
-    console.log(date);
-    const pad = (num) => String(num).padStart(2, "0");
-    const year = date.getFullYear();
-    const month = pad(date.getMonth() + 1);
-    const day = pad(date.getDate());
-    const hours = pad(date.getUTCHours());
-    const minutes = pad(date.getMinutes());
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
+    console.log(dateTimeStr);
     
-  };
+    if (!dateTimeStr) return "";
+    
+    const pad = (num) => String(num).padStart(2, "0");
+  
+    if (dateTimeStr.includes('T') && dateTimeStr.includes(':')) {
+        const match = dateTimeStr.match(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/);
+        if (match) {
+            return `${match[1]}T${match[2]}`;
+        }
+    }
+    const cleanStr = dateTimeStr.trim();
+    let year, month, day, hours = "00", minutes = "00";
+    
+    if (cleanStr.includes(' ')) {
+        const [datePart, timePart] = cleanStr.split(' ');
+        [year, month, day] = datePart.split('-');
+        
+        if (timePart) {
+            const timeParts = timePart.split(':');
+            hours = pad(timeParts[0] || "00");
+            minutes = pad(timeParts[1] || "00");
+        }
+    } else {
+        [year, month, day] = cleanStr.split('-');
+    }
+    
+    return `${year}-${pad(month)}-${pad(day)}T${hours}:${minutes}`;
+};
 
   useEffect(() => {
     if (selectedInfo) {
@@ -120,11 +138,11 @@ const CreateModal = ({ isOpen, onOpenChange, selectedInfo, fetchEvents }) => {
           {selectedInfo ? (
             <>
               <p className="mb-4">
-                <strong>ชื่อผู้จอง : </strong>{session.user.title} {session.user.firstname} {session.user.lastname}
+                <strong>ข้อมูลผู้จอง :</strong>{session?.user?.title}{session?.user?.firstname}{session?.user?.lastname}
               </p>
 
               <p className="mb-4">
-                <strong>รหัส :</strong> {session.user.id}
+                <strong>รหัส :</strong> {session?.user?.id}
               </p>
 
               {errorMessage && (
