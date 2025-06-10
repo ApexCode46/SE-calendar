@@ -138,7 +138,7 @@ const TableComponent = () => {
                 </tr>
               ) : currentData.length > 0 ? (
                 currentData.map((item) => (
-                  <tr key={item.id} className="border-b hover:bg-gray-50">
+                  <tr key={item.user_reserve_id} className="border-b hover:bg-gray-50">
                     <td className="px-6 py-4">
                       {formatDate(item.user_res_timestamp)}
                     </td>

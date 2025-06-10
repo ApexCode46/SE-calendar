@@ -18,6 +18,8 @@ const CreateModal = ({ isOpen, onOpenChange, selectedInfo, fetchEvents }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+
+
   const handleAddEvent = async () => {
     if (!topic.trim()) {
       setErrorMessage("กรุณากรอกหัวข้อ");
@@ -54,7 +56,9 @@ const CreateModal = ({ isOpen, onOpenChange, selectedInfo, fetchEvents }) => {
         },
         body: JSON.stringify(newEvent),
       });
-
+      
+      console.log(response);
+      
       if (response.ok) {
         fetchEvents();
 
@@ -65,7 +69,7 @@ const CreateModal = ({ isOpen, onOpenChange, selectedInfo, fetchEvents }) => {
         onOpenChange(false);
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message || "เกิดข้อผิดพลาดในการเพิ่มกิจกรรม");
+        setErrorMessage(errorData.message || "เกิดข้อผิดพลาดในการเพิ่มกิจกรรม!");
         console.log("Error adding event", response.statusText);
       }
     } catch (e) {
@@ -80,13 +84,15 @@ const CreateModal = ({ isOpen, onOpenChange, selectedInfo, fetchEvents }) => {
   const formatDateTime = (dateTimeStr) => {
     if (!dateTimeStr) return "";
     const date = new Date(dateTimeStr);
+    console.log(date);
     const pad = (num) => String(num).padStart(2, "0");
     const year = date.getFullYear();
     const month = pad(date.getMonth() + 1);
     const day = pad(date.getDate());
-    const hours = pad(date.getHours());
+    const hours = pad(date.getUTCHours());
     const minutes = pad(date.getMinutes());
     return `${year}-${month}-${day}T${hours}:${minutes}`;
+    
   };
 
   useEffect(() => {

@@ -32,8 +32,10 @@ export default function Calendar() {
   
   
   const handleSelect = (info) => {
+    // console.log(info);
     setSelectedInfo(info);
     onOpenCreateModal();
+
   };
    
   const handleShow = async (info) => {
