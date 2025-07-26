@@ -16,7 +16,6 @@ export async function PUT(req, { params }) {
     
     if (
       !body.topic ||
-      !body.description ||
       !body.startDateTime ||
       !body.endDateTime
     ) {

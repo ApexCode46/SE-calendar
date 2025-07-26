@@ -17,28 +17,53 @@ export default function Nav() {
   };
 
   return (
-    <div className="flex fixed z-50 w-full h-12 items-center justify-start bg-red-800">
-      <p className="pl-4 text-yellow-300 text-xl font-bold disabled">
-        SE Calendar
-      </p>
-
-      {session && (
-        <>
-          <div className="flex items-center ml-auto">
-            <p className="text-yellow-300">
-              {session.user.title} {session.user.firstname}{" "}
-              {session.user.lastname}
-            </p>
-            <button
-              className="bg-amber-300 text-red-600 p-1 px-2 mx-3 rounded "
-              onClick={handleLogout}
-              aria-label="Sign out"
-            >
-              ออกจากระบบ
-            </button>
+    <nav className="fixed top-0 left-0 right-0 z-50 h-16 bg-gradient-to-r from-red-800 via-red-700 to-red-800 shadow-lg backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div className="flex items-center justify-between h-full">
+          {/* Logo Section */}
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center shadow-md">
+              <span className="text-red-800 font-bold text-lg">📅</span>
+            </div>
+            <h1 className="text-yellow-300 text-xl sm:text-2xl font-bold tracking-wide hover:text-yellow-200 transition-colors duration-200">
+              SE Calendar
+            </h1>
           </div>
-        </>
-      )}
-    </div>
+
+          {/* User Section */}
+          {session && (
+            <div className="flex items-center space-x-4">
+              {/* User Info */}
+              <div className="hidden sm:flex items-center space-x-2 bg-red-900/50 px-4 py-2 rounded-full backdrop-blur-sm">
+                <div className="text-yellow-300 text-sm">
+                  <p className="font-medium">
+                    {session.user.title} {session.user.firstname} {session.user.lastname}
+                  </p>
+                </div>
+              </div>
+              
+              {/* Mobile User Info */}
+              <div className="sm:hidden flex items-center space-x-2">
+                <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center">
+                  <span className="text-red-800 font-semibold text-sm">
+                    {session.user.firstname?.[0]}{session.user.lastname?.[0]}
+                  </span>
+                </div>
+              </div>
+
+              {/* Logout Button */}
+              <button
+                className="bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-red-700 font-semibold py-2 px-4 rounded-full shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-opacity-50"
+                onClick={handleLogout}
+                aria-label="Sign out"
+              >
+                <span className="hidden sm:inline">ออกจากระบบ</span>
+                <span className="sm:hidden">🚪</span>
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </nav>
   );
 }

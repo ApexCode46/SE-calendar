@@ -50,12 +50,33 @@ export const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.user = user;
+        token.id = user.id;
+        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
       session.user = token.user;
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      // หลังจาก login สำเร็จให้ redirect ไปหน้า calendar
+      if (url.startsWith(baseUrl + "/api/auth/signin") || url === baseUrl + "/") {
+        return `${baseUrl}/calendar`;
+      }
+      
+      // หากเป็น URL ภายในเว็บไซต์ ให้ redirect ตามปกติ
+      if (url.startsWith(baseUrl)) {
+        return url;
+      }
+      
+      // หากเป็น relative URL ให้ redirect ไป calendar
+      if (url.startsWith("/")) {
+        return `${baseUrl}/calendar`;
+      }
+      
+      // default fallback ไปหน้า calendar
+      return `${baseUrl}/calendar`;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,

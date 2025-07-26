@@ -130,104 +130,184 @@ const CreateModal = ({ isOpen, onOpenChange, selectedInfo, fetchEvents }) => {
   }, [selectedInfo]);
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal 
+      isOpen={isOpen} 
+      onOpenChange={onOpenChange} 
+      size="2xl" 
+      className="mx-4"
+      scrollBehavior="inside"
+      placement="center"
+      backdrop="blur"
+      classNames={{
+        base: "max-h-[95vh] my-2",
+        wrapper: "p-4",
+        body: "max-h-[60vh] overflow-y-auto",
+        footer: "border-t border-gray-200"
+      }}
+    >
       <ModalContent>
-        <ModalHeader>จองห้อง</ModalHeader>
-        <ModalBody>
-          <hr />
+        <ModalHeader className="bg-gradient-to-r from-red-600 to-red-800 text-yellow-300 rounded-t-lg modal-header-mobile">
+          <div className="flex items-center space-x-2">
+            <span className="text-xl sm:text-2xl">📅</span>
+            <span className="text-lg sm:text-xl font-bold">สร้างการจองใหม่</span>
+          </div>
+        </ModalHeader>
+        <ModalBody className="p-4 sm:p-6 modal-scroll-smooth">
           {selectedInfo ? (
-            <>
-              <p className="mb-4">
-                <strong>ข้อมูลผู้จอง :</strong>{session?.user?.title}{session?.user?.firstname}{session?.user?.lastname}
-              </p>
+            <div className="space-y-6">
+              {/* User Info Section */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
+                <h3 className="text-lg font-semibold text-blue-900 mb-3 flex items-center">
+                  <span className="mr-2">👤</span>
+                  ข้อมูลผู้จอง
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 modal-grid-responsive">
+                  <div>
+                    <label className="block text-sm font-medium text-blue-800 mb-1">ชื่อผู้จอง</label>
+                    <div className="bg-white p-3 rounded-lg border border-blue-200">
+                      <span className="text-blue-900 font-medium text-sm sm:text-base">
+                        {session?.user?.title} {session?.user?.firstname} {session?.user?.lastname}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-blue-800 mb-1">รหัสประจำตัว</label>
+                    <div className="bg-white p-3 rounded-lg border border-blue-200">
+                      <span className="text-blue-900 font-medium text-sm sm:text-base">{session?.user?.id}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-              <p className="mb-4">
-                <strong>รหัส :</strong> {session?.user?.id}
-              </p>
-
+              {/* Error Message */}
               {errorMessage && (
-                <p className="mb-4 text-red-600">{errorMessage}</p>
+                <div className="bg-gradient-to-r from-red-50 to-red-100 border-l-4 border-red-500 p-4 rounded-lg">
+                  <div className="flex items-center">
+                    <span className="text-red-500 mr-2 text-lg">⚠️</span>
+                    <span className="text-red-700 font-medium">{errorMessage}</span>
+                  </div>
+                </div>
               )}
 
-              <p className="mb-4">
-                <label htmlFor="topic" className="block mb-2 font-semibold">
-                  หัวข้อ :
-                </label>
-                <input
-                  type="text"
-                  id="topic"
-                  className=" px-4 py-2 border rounded-lg"
-                  value={topic}
-                  onChange={(e) => setTopic(e.target.value)}
-                  placeholder="กรุณากรอกหัวข้อ"
-                  required
-                />
-              </p>
+              {/* Form Fields */}
+              <div className="space-y-5">
+                <div>
+                  <label htmlFor="topic" className="block text-sm font-semibold text-gray-700 mb-2">
+                    <span className="flex items-center">
+                      <span className="mr-2">📝</span>
+                      หัวข้อการจอง
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    id="topic"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 mobile-input"
+                    value={topic}
+                    onChange={(e) => setTopic(e.target.value)}
+                    placeholder="กรุณากรอกหัวข้อการจอง"
+                    required
+                  />
+                </div>
 
-              <p className="mb-4">
-                <label htmlFor="description" className="block mb-2 font-semibold">
-                  หมายเหตุ :
-                </label>
-                <textarea
-                  id="description"
-                  className="w-full px-4 py-2 border rounded-lg"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="กรุณากรอกหมายเหตุ"
-                  required
-                ></textarea>
-              </p>
+                <div>
+                  <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-2">
+                    <span className="flex items-center">
+                      <span className="mr-2">📋</span>
+                      รายละเอียด/หมายเหตุ
+                    </span>
+                  </label>
+                  <textarea
+                    id="description"
+                    rows="4"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 resize-none"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="กรุณากรอกรายละเอียดหรือหมายเหตุเพิ่มเติม"
+                  />
+                </div>
 
-              <p className="mb-4">
-                <label htmlFor="startDateTime" className="block mb-2 font-semibold">
-                  วันที่และเวลาเริ่ม :
-                </label>
-                <input
-                  type="datetime-local"
-                  id="startDateTime"
-                  className="w-full px-4 py-2 border rounded-lg"
-                  value={startDateTime}
-                  onChange={(e) => setStartDateTime(e.target.value)}
-                />
-              </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 modal-grid-responsive">
+                  <div>
+                    <label htmlFor="startDateTime" className="block text-sm font-semibold text-gray-700 mb-2">
+                      <span className="flex items-center">
+                        <span className="mr-2">🕐</span>
+                        วันที่และเวลาเริ่มต้น
+                      </span>
+                    </label>
+                    <input
+                      type="datetime-local"
+                      id="startDateTime"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200"
+                      value={startDateTime}
+                      onChange={(e) => setStartDateTime(e.target.value)}
+                    />
+                  </div>
 
-              <p className="mb-4">
-                <label htmlFor="endDateTime" className="block mb-2 font-semibold">
-                  วันที่และเวลาสิ้นสุด :
-                </label>
-                <input
-                  type="datetime-local"
-                  id="endDateTime"
-                  className="w-full px-4 py-2 border rounded-lg"
-                  value={endDateTime}
-                  onChange={(e) => setEndDateTime(e.target.value)}
-                />
-              </p>
-            </>
+                  <div>
+                    <label htmlFor="endDateTime" className="block text-sm font-semibold text-gray-700 mb-2">
+                      <span className="flex items-center">
+                        <span className="mr-2">🕐</span>
+                        วันที่และเวลาสิ้นสุด
+                      </span>
+                    </label>
+                    <input
+                      type="datetime-local"
+                      id="endDateTime"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200"
+                      value={endDateTime}
+                      onChange={(e) => setEndDateTime(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           ) : (
-            <p className="text-red-600">กรุณาเลือกวันและเวลาที่ต้องการจอง</p>
+            <div className="text-center py-8">
+              <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-red-600 text-3xl">📅</span>
+              </div>
+              <p className="text-red-600 font-medium text-lg">กรุณาเลือกวันและเวลาที่ต้องการจอง</p>
+              <p className="text-gray-500 mt-2">คลิกที่ปฏิทินเพื่อเลือกช่วงเวลา</p>
+            </div>
           )}
         </ModalBody>
-        <ModalFooter>
-          <Button
-            variant="flat"
-            color="success"
-            className="bg-yellow-300 p-3 mr-5"
-            onPress={handleAddEvent}
-            disabled={isLoading || !selectedInfo}
-            isLoading={isLoading}
-          >
-            จองห้อง
-          </Button>
-          <Button
-            variant="flat"
-            color="error"
-            className="bg-red-800 text-yellow-300 px-5"
-            onPress={() => onOpenChange(false)}
-            disabled={isLoading}
-          >
-            ปิด
-          </Button>
+        <ModalFooter className="bg-gray-50 rounded-b-lg p-4 sm:p-6 modal-footer-mobile">
+          <div className="flex flex-col sm:flex-row gap-3 w-full mobile-button-stack">
+            <Button
+              variant="flat"
+              color="danger"
+              className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 rounded-xl transition-all duration-200"
+              onPress={() => onOpenChange(false)}
+              disabled={isLoading}
+            >
+              <span className="flex items-center justify-center">
+                <span className="mr-2">✖️</span>
+                ยกเลิก
+              </span>
+            </Button>
+            <Button
+              variant="flat"
+              color="success"
+              className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              onPress={handleAddEvent}
+              disabled={isLoading || !selectedInfo}
+              isLoading={isLoading}
+            >
+              <span className="flex items-center justify-center">
+                {isLoading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                    กำลังจอง...
+                  </>
+                ) : (
+                  <>
+                    <span className="mr-2">✅</span>
+                    ยืนยันการจอง
+                  </>
+                )}
+              </span>
+            </Button>
+          </div>
         </ModalFooter>
       </ModalContent>
     </Modal>
