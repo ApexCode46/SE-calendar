@@ -45,7 +45,7 @@ export default function LoginPage() {
             <span className="text-yellow-300 text-3xl">📅</span>
           </div>
           <h1 className="text-3xl font-bold text-red-800 mb-2">SE Calendar</h1>
-          <p className="text-gray-600">ระบบจองห้องประชุม</p>
+          <p className="text-gray-600">ระบบจองห้องสาขา</p>
         </div>
 
         {/* Login Form */}
